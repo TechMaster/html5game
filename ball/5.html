@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas"></canvas>
+</body>
+
+</html>
+<!---
+  Bổ xung điều chỉnh kích thước canvas khi điều chỉnh cửa sổ trình duyệt
+  addEventListener("resize", function () {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    init();
+  }); 
+
+  và lắng nghe sự kiện click di bóng vào chính giữa
+  addEventListener("click", function (event) {
+    ball.jump(canvas.width * 0.5, canvas.height * 0.5);
+  });
+
+-->
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext('2d');
+
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  addEventListener("resize", function () {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    init();
+  }); 
+
+
+  class Ball {
+    constructor(x, y, radius, color) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.color = color;
+    }
+
+    draw() {
+      c.beginPath();
+      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+      c.fillStyle = this.color;
+      c.fill();
+      c.stroke();
+      c.closePath();
+    }
+
+    /* Bổ xung logic chặn bóng không đi quá tường trái và phải
+    */
+    move(dx, dy) {
+      //console.log("before move" + this.x);
+      if (this.x > canvas.width - this.radius - 1) {
+        alert("Cannot move right any more");
+        return;
+      }
+
+      if (this.x + dx <= this.radius) {        
+        alert("Cannot move left any more");
+        return;
+      }
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      this.x = this.x + dx;
+      this.y = this.y + dy;
+      //console.log("after move" + this.x);
+      this.draw();
+    }
+
+    jump(x, y) {
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      this.x = x;
+      this.y = y;
+      this.draw();
+    }
+  }
+
+  var ball = new Ball(30, 100, 20, 'red');
+  ball.draw();
+
+  //Di chuyển sang trái và phải 
+  addEventListener('keydown', function (event) {
+    if (event.keyCode == 37) {
+      console.log('Left was pressed');
+      ball.move(-2, 0);
+    }
+    else if (event.keyCode == 39) {
+      console.log('Right was pressed');
+      ball.move(2, 0);
+    }
+  });
+
+  addEventListener("click", function (event) {
+    ball.jump(canvas.width * 0.5, canvas.height * 0.5);
+  });
+</script>

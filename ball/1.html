@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas"></canvas>
+</body>
+
+</html>
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext('2d');
+
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  c.beginPath();
+  c.arc(canvas.width * 0.5, canvas.height * 0.5, 20, 0, Math.PI * 2, false);
+  c.fillStyle = "red";
+  c.fill();
+  c.stroke();
+  c.closePath();
+</script>

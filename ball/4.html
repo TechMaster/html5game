@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas"></canvas>
+</body>
+
+</html>
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext('2d');
+
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  class Ball {
+    constructor(x, y, radius, color) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.color = color;
+    }
+
+    draw() {
+      c.beginPath();
+      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+      c.fillStyle = this.color;
+      c.fill();
+      c.stroke();
+      c.closePath();
+    }
+
+    /* Bổ xung logic chặn bóng không đi quá tường trái và phải
+    */
+    move(dx, dy) {
+      //console.log("before move" + this.x);
+      if (this.x > canvas.width - this.radius - 1) {
+        alert("Cannot move right any more");
+        return;
+      }
+
+      if (this.x + dx <= this.radius) {        
+        alert("Cannot move left any more");
+        return;
+      }
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      this.x = this.x + dx;
+      this.y = this.y + dy;
+      //console.log("after move" + this.x);
+      this.draw();
+    }
+  }
+
+  var ball = new Ball(30, 100, 20, 'red');
+  ball.draw();
+
+  //Di chuyển sang trái và phải 
+  addEventListener('keydown', function (event) {
+    if (event.keyCode == 37) {
+      console.log('Left was pressed');
+      ball.move(-2, 0);
+    }
+    else if (event.keyCode == 39) {
+      console.log('Right was pressed');
+      ball.move(2, 0);
+    }
+  }); 
+</script>

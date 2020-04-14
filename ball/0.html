@@ -1,0 +1,14 @@
+<canvas></canvas>
+
+<script>
+  var canvas = document.querySelector('canvas');
+  var c = canvas.getContext('2d');
+
+  // Vẽ một quả bóng
+  c.beginPath();
+  c.arc(100, 100 * 0.5, 20, 0, Math.PI * 2, false);
+  c.fillStyle = "red";
+  c.fill();
+  c.stroke();
+  c.closePath();
+</script>

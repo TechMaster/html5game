@@ -11,7 +11,7 @@
 
 </html>
 <!---
-Bóng rơi, và bổ xung hiệu ứng dừng lại
+Giá tốc trọng trường, bóng rơi, nhưng khi đập đất vẫn kêu bình bịch mãi không hết
 }
 -->
 <script>
@@ -36,7 +36,6 @@ Bóng rơi, và bổ xung hiệu ứng dừng lại
       this.dy = dy;      
       this.radius = radius;
       this.color = color;
-      this.moving = false;
     }
 
     draw() {
@@ -48,23 +47,17 @@ Bóng rơi, và bổ xung hiệu ứng dừng lại
       c.closePath();
     }
 
-    /* Bổ xung logic dừng lại khi vận tốc gần về không khi đập đất
+    /* Bổ xung logic chặn bóng không đi quá tường trái và phải
     */
     move() {
-      if (this.y + this.dy > canvas.height - this.radius) { //đập đất
+      if (this.y + this.radius + this.dy > canvas.height) { //đập đất
         this.dy = -this.dy;
-        this.dy = this.dy * friction;
-        if (Math.abs(this.dy) < 0.005) {         
-          this.dy = 0;
-        } else {     
-          var x = document.getElementById("ball_hit");
-          x.play();
-        }
+        this.dy = this.dy * friction;        
+        var x = document.getElementById("ball_hit");
+        x.play();
       } else {
         this.dy += gravity;
       }
-
-      
       this.y += this.dy;
       this.draw();
     }

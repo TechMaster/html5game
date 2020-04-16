@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas></canvas>
+</body>
+
+</html>
+<!--
+Vẽ một hình chữ nhật tự cập nhật kích thước khi cửa sổ trình duyệt thay đổi
+-->
+<script>
+  // Initial Setup
+  var canvas = document.querySelector('canvas');
+  var c = canvas.getContext('2d');
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  class BorderWall {
+    resize() {
+      this.x = 20;
+      this.y = 20;
+      this.width = canvas.width - 60;
+      this.height = canvas.height - 60;
+    }
+    constructor() {
+      this.resize();
+    }  
+
+    draw() {
+      c.beginPath();
+      c.lineWidth = 10;
+      c.strokeStyle = "black";
+      c.rect(this.x, this.y, this.width, this.height);
+      c.stroke();
+    }
+
+  }
+
+  var borderWall = new BorderWall();
+  function init() {
+    borderWall.draw()
+  }
+
+  addEventListener("resize", function () {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    borderWall.resize();
+    borderWall.draw()
+  });
+
+  init();
+
+</script>

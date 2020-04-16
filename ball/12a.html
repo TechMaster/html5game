@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <button id=drawBtn>Draw</button>
+  <button id=clearBtn>Clear</button>
+  <br>
+  <canvas id="mycanvas" width=450 height=300></canvas>
+</body>
+
+</html>
+<script>
+  var canvas = document.getElementById('mycanvas');
+  var ctx = canvas.getContext('2d');
+
+  init();
+
+  function init() {
+    var drawBtn, clearBtn;
+
+    drawBtn = document.getElementById('drawBtn');
+    drawBtn.onclick = draw;
+
+    clearBtn = document.getElementById('clearBtn');
+    clearBtn.onclick = clearCanvas;
+
+    clearCanvas();
+  }
+
+  function drawCircle(circle, ctx) {
+
+    ctx.beginPath();
+    ctx.arc(circle.centerX, circle.centerY, circle.radius, 0, 2 * Math.PI);
+    ctx.closePath();
+
+    ctx.fillStyle = circle.fillStyle;
+    ctx.fill();
+    ctx.strokeStyle = 'Black'
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+  }
+
+  function draw() {
+
+    var top = 80;
+    var left = 130;
+    var high = 200;
+    var wide = 300;
+
+    var top2 = 50;
+    var left2 = 90;
+    var high2 = 160;
+    var wide2 = 260;
+
+    var cirleft = 250;
+    var cirtop = 120;
+    var myRadius1 = 110;
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'Blue';
+    ctx.moveTo(30, 50);
+    ctx.lineTo(120, 150);
+    ctx.lineWidth = 6;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'Green';
+    ctx.lineWidth = 3;
+    ctx.moveTo(100, 50);
+    ctx.lineTo(170, 125);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'Red';
+    ctx.moveTo(80, 95);
+    ctx.lineTo(30, 75);
+    ctx.stroke();
+
+    ctx.fillStyle = 'Blue';
+    ctx.fillRect(left, top, wide, high);
+    ctx.fill();
+
+    ctx.fillStyle = 'Green';
+    ctx.fillRect(left2, top2, wide2, high2);
+
+    var myColor1 = 'Yellow';
+
+    var myCircle1 = {
+      centerX: cirleft,
+      centerY: cirtop,
+      radius: myRadius1,
+      fillStyle: myColor1
+    }
+    drawCircle(myCircle1, ctx)
+  }
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+</script>

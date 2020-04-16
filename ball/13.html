@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas></canvas>
+</body>
+
+</html>
+<!--
+Vẽ một hình chữ nhật tự cập nhật kích thước khi cửa sổ trình duyệt thay đổi
+bên trong có một hình tam giác tô màu gradient  
+-->
+<script>
+  // Initial Setup
+  var canvas = document.querySelector('canvas');
+  var c = canvas.getContext('2d');
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  class BorderWall {
+    resize() {
+      this.x = 20;
+      this.y = 20;
+      this.width = canvas.width - 60;
+      this.height = canvas.height - 60;
+    }
+    constructor() {
+      this.resize();
+    }
+
+    draw() {
+      c.lineWidth = 10;
+      c.strokeStyle = "black";
+
+      c.rect(this.x, this.y, this.width, this.height);
+      c.stroke();
+
+    }
+
+  }
+
+  class Triangle {
+    resize() {
+      this.x = 30;
+      this.y = 30;
+      this.width = canvas.width - 50;
+      this.height = canvas.height - 50;
+    }
+    constructor() {
+      this.resize();
+    }
+
+    draw() {
+      c.lineWidth = 6;
+      c.strokeStyle = "red";
+      var my_gradient = c.createLinearGradient(0, 0, this.width, this.height);
+      my_gradient.addColorStop(0.2, "black");
+      my_gradient.addColorStop(0.4, "red");
+      my_gradient.addColorStop(0.8, "yellow");
+      c.fillStyle = my_gradient;
+      c.beginPath();
+      c.moveTo(this.x, this.y);
+      c.lineTo(this.width, this.height * 0.5);
+      c.lineTo(this.width * 0.5, this.height);
+      c.closePath();
+      c.fill();
+    }
+  }
+
+  var borderWall = new BorderWall();
+  var triangle = new Triangle();
+
+  function init() {
+    borderWall.draw();
+    triangle.draw();
+  }
+
+  addEventListener("resize", function () {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    borderWall.resize();
+    borderWall.draw()
+
+    triangle.resize();
+    triangle.draw();
+  });
+
+  init();
+
+</script>

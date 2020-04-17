@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas></canvas>
+  <audio id="ball_hit">
+    <source src="ball.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</body>
+
+</html>
+<!--
+Hai quả bóng va đập với nhau
+https://stackoverflow.com/questions/345838/ball-to-ball-collision-detection-and-handling
+https://en.wikipedia.org/wiki/Elastic_collision
+-->
+<script>
+  // Initial Setup
+  var canvas = document.querySelector('canvas');
+  var c = canvas.getContext('2d');
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  // Utility Functions
+  function randomIntFromRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  class BorderWall {
+    resize() {
+      this.x = 20;
+      this.y = 20;
+      this.width = canvas.width - 60;
+      this.height = canvas.height - 60;
+      this.strokeWidth = 10; //Tham số hoá
+    }
+    constructor() {
+      this.resize();
+    }
+
+    draw() {
+      c.lineWidth = this.strokeWidth;
+      c.strokeStyle = "black";
+      c.beginPath();
+      c.rect(this.x, this.y, this.width, this.height);
+      c.stroke();
+      c.closePath();
+    }
+
+  }
+
+  class Triangle {
+    resize() {
+      this.x = 30;
+      this.y = 30;
+      this.width = canvas.width - 50;
+      this.height = canvas.height - 50;
+    }
+    constructor() {
+      this.resize();
+    }
+
+    draw() {
+      c.lineWidth = 6;
+      c.strokeStyle = "red";
+      var my_gradient = c.createLinearGradient(0, 0, this.width, this.height);
+      my_gradient.addColorStop(0.2, "black");
+      my_gradient.addColorStop(0.4, "red");
+      my_gradient.addColorStop(0.8, "yellow");
+      c.fillStyle = my_gradient;
+      c.beginPath();
+      c.moveTo(this.x, this.y);
+      c.lineTo(this.width, this.height * 0.5);
+      c.lineTo(this.width * 0.5, this.height);
+      c.closePath();
+      c.fill();
+    }
+  }
+
+  class Ball {
+    constructor(x, y, radius, color) {
+      this.x = x;
+      this.y = y;
+      this.dx = 0;
+      this.dy = 0;
+      this.radius = radius;
+      this.color = color;
+      this.ball_hit_sound = document.getElementById("ball_hit");
+    }
+
+    //Truyền đối tượng tường bao vào trong
+    setWall(wall) {
+      this.wall = wall;
+    }
+
+    move() {
+      let wall = this.wall;      
+      if (this.x - this.radius < wall.x + wall.strokeWidth) {
+        this.x = wall.x + wall.strokeWidth + this.radius;
+        this.dx = - this.dx;
+        this.ball_hit_sound.play();
+      }
+
+      if (this.x + this.radius > wall.x + wall.width) {
+        this.x = wall.x + wall.width - this.radius;
+        this.dx = - this.dx;
+        this.ball_hit_sound.play();
+      }
+
+      if (this.y - this.radius < wall.y + wall.strokeWidth) {
+        this.y = wall.y + wall.strokeWidth + this.radius;
+        this.dy = - this.dy;
+        this.ball_hit_sound.play();
+      }
+
+      if (this.y + this.radius > wall.y + wall.height) {
+        this.y = wall.y + wall.height - this.radius;
+        this.dy = - this.dy;
+        this.ball_hit_sound.play();
+      }
+
+      this.x += this.dx;
+      this.y += this.dy;
+      this.draw();
+    }
+
+    draw() {
+      c.beginPath();
+      c.lineWidth = 6;
+      c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+      c.fillStyle = this.color;
+      c.fill();
+      c.strokeStyle = "black";
+      c.stroke();
+      c.closePath();
+    };
+  }
+
+  let borderWall = new BorderWall();
+  let triangle = new Triangle();
+  let ballA = new Ball(canvas.width * 0.5, canvas.height * 0.5, 20, "red");
+  ballA.setWall(borderWall);
+
+  let ballB = new Ball(canvas.width * 0.2, canvas.height * 0.7, 40, "blue");
+  ballB.setWall(borderWall);
+
+  function init() {
+    borderWall.draw();
+    triangle.draw();
+    ballA.draw();
+    ballB.draw();
+  }
+
+  addEventListener("resize", function () {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    borderWall.resize();
+    borderWall.draw()
+
+    triangle.resize();
+    triangle.draw();
+  });
+
+  addEventListener("click", function (event) {
+    ballA.dx = randomIntFromRange(-6, 6);
+    ballA.dy = randomIntFromRange(-4, 4);
+
+    ballB.dx = randomIntFromRange(-6, 6);
+    ballB.dy = randomIntFromRange(-4, 4);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    borderWall.draw()
+    triangle.draw();
+    ballA.move();
+    ballB.move();
+  }
+
+  animate();
+  init();
+
+</script>

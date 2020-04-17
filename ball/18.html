@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="mycanvas"></canvas>
+</body>
+<!-- 
+  Rolling ball
+-->
+<script>
+  var canvas = document.getElementById('mycanvas');
+  var c = canvas.getContext('2d');
+  var img = new Image();
+  img.src = "ball.png";
+  img.addEventListener('load', loaded);  //Khi nào ảnh load xong mới vẽ nó lên canvas
+
+  function loaded() {
+    c.drawImage(img, 20, 20);
+  }
+</script>
+</html>

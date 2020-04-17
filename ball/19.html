@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="mycanvas" width ="400" height="400"></canvas>
+  <button id="clockwise">Rotate right</button>
+  <button id="counterclockwise">Rotate left</button>
+</body>
+<!-- 
+  Rolling ball
+-->
+<script>
+  var canvas = document.getElementById('mycanvas');
+  var c = canvas.getContext('2d');
+  var img = new Image();
+  img.src = "ball.png";
+  img.addEventListener('load', loaded);  //Khi nào ảnh load xong mới vẽ nó lên canvas
+
+  function loaded() {
+    c.drawImage(img, canvas.width * 0.5 - img.width * 0.5, canvas.height * 0.5 - img.height * 0.5);
+  }
+  var angleInDegrees = 0;
+  btnClockwise = document.getElementById("clockwise");
+  btnClockwise.onclick = ()=>{
+    console.log("Clock Wise");
+    angleInDegrees += 30;
+    drawRotated(angleInDegrees);
+  };
+
+  btnCounterClockwise = document.getElementById("counterclockwise");
+  btnCounterClockwise.onclick = ()=>{
+    angleInDegrees -= 30;
+    drawRotated(angleInDegrees);
+  };
+
+  function drawRotated(degrees) {
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    c.save();
+    c.translate(canvas.width / 2, canvas.height / 2);
+    c.rotate(degrees * Math.PI / 180);
+    c.drawImage(img, -img.width / 2, -img.width / 2);
+    c.restore();
+  }
+</script>
+
+</html>

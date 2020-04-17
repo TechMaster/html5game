@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="mycanvas" width="800" height="400"></canvas>
+</body>
+<!-- 
+  Rolling ball
+-->
+<script>
+  let canvas = document.getElementById('mycanvas');
+  let context = canvas.getContext('2d');
+
+  class Ball {
+    constructor(image_file, context, x, y) {
+      this.img = new Image();
+      this.img.src = image_file;
+      this.angleInDegrees = 0;
+      this.c = context;
+      this.x = x;
+      this.y = y;
+    }
+
+    update() {
+      let delta_angle = 2;
+      this.c.clearRect(0, 0, canvas.width, canvas.height);
+      this.c.save();
+      this.c.translate(this.x, this.y);
+      this.angleInDegrees += delta_angle;
+      this.c.rotate(this.angleInDegrees * Math.PI / 180);
+      this.c.drawImage(this.img, -this.img.width / 2, -this.img.width / 2);
+      this.c.restore();
+      this.x += 0.5 * this.img.width * delta_angle * (3.14 / 180);
+    }
+  }
+
+  function drawGround(context, x, y, width, height) {
+    context.beginPath();
+    context.fillStyle = "black";
+    context.rect(x, y, width, height);
+    context.fill();
+    context.closePath();
+  }
+
+  
+
+  let ball = new Ball('ball.png', context, 30, 100);
+  drawGround(context, 0, ball.y + ball.img.height * 0.5, canvas.width, 30);
+  function animate() {
+    requestAnimationFrame(animate);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    ball.update();
+    drawGround(context, 0, ball.y + ball.img.height * 0.5, canvas.width, 30);
+  }
+  animate();
+</script>
+
+</html>

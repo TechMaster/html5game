@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="400" height="400" style="background-color:#333"></canvas>
+</body>
+</html>
+<script>
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+
+  class Pendulum {
+    constructor(context, x, y, length, radius, beta) {
+      this.ctx = context;
+      this.x = x; //điểm tâm quay
+      this.y = y;
+      this.length = length;
+      this.radius = radius;      
+      this.beta = beta; //Lưu lại góc ban đầu
+      this.angle = Math.PI * 0.5 + beta; //góc lắc từ Pi/2 - beta đến Pi/2 + beta
+      this.delta = - 0.01;
+    }
+
+    update() {
+      let c = this.ctx;
+      c.beginPath();
+      c.lineWidth = 4;
+      c.lineCap = "round";
+      c.moveTo(this.x, this.y);
+      c.strokeStyle = "white";      
+      c.lineTo(this.x + this.length * Math.cos(this.angle), 
+      this.y + this.length * Math.sin(this.angle));
+      c.stroke();
+
+      c.beginPath();
+      c.arc(this.x + (this.length + this.radius) * Math.cos(this.angle), 
+      this.y + (this.length + this.radius)* Math.sin(this.angle), 
+      this.radius, 0, Math.PI * 2, false);
+      
+      c.fillStyle = this.color;
+      c.fill();
+      c.stroke();
+      c.closePath();
+
+
+      this.angle += this.delta;
+      if (this.angle < Math.PI * 0.5 - this.beta) {
+        this.angle = Math.PI * 0.5 - this.beta;
+        this.delta = - this.delta;
+      }
+
+      if (this.angle > Math.PI * 0.5 + this.beta) {
+        this.angle = Math.PI * 0.5 + this.beta;
+        this.delta = - this.delta;
+      }
+
+    }
+  }
+
+  let pendulum = new Pendulum(ctx,canvas.width * 0.5, 10, canvas.height * 0.7, 15, Math.PI * 0.2);
+  function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pendulum.update();
+  }
+  animate();
+</script>

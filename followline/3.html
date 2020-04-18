@@ -24,13 +24,16 @@
     update() {
       let c = this.c;
       c.save();
-      c.rotate(0.5);
+      c.translate(canvas.width * 0.5, canvas.height * 0.5);
+      c.rotate(this.angle);
       c.translate(- this.img.width * 0.5, - this.img.height * 0.5); // Để tâm con bọ nằm chính giữa tâm canvas      
       c.drawImage(this.img, this.radius, 0);
       c.restore();
+      this.angle -= 0.005;
     }
   }
   function drawCircle(c) {
+    c.save();
     c.translate(canvas.width * 0.5, canvas.height * 0.5);
     c.beginPath();
     c.lineWidth = 6;
@@ -38,9 +41,18 @@
     c.strokeStyle = "white";
     c.stroke();
     c.closePath();
+    c.restore();
   };
 
-  drawCircle(ctx);
+  
   let beetle = new Beele(ctx, "bettle.png", canvas.width * 0.4);
-  beetle.update();
+  
+  function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCircle(ctx);
+    beetle.update();
+  }
+
+  animate();
 </script>

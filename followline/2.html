@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="400" height="400" style="background-color:#333"></canvas>
+</body>
+</html>
+
+<script>
+  let canvas = document.getElementById("canvas");
+  let ctx = canvas.getContext("2d");
+  
+
+  class Beele {
+    constructor (c, image_file, radius) {
+      this.c = c; //context
+      this.img = new Image();
+      this.img.src = image_file;
+      this.angle = 0;
+      this.radius = radius;
+    }
+
+    update() {
+      this.c.save();
+      this.c.translate(- this.img.width * 0.5, - this.img.height * 0.5);
+      this.c.drawImage(this.img, 0, 0);
+      this.c.save();
+
+    }
+  }
+  function drawCircle(c) {
+      c.translate(canvas.width * 0.5, canvas.height * 0.5);    
+      c.beginPath();
+      c.lineWidth = 6;
+      c.arc(0, 0, canvas.width * 0.4, 0, Math.PI * 2, false);
+      c.strokeStyle = "white";
+      c.stroke();
+      c.closePath();
+  };
+
+  drawCircle(ctx);
+  let beetle = new Beele(ctx, "bettle.png", canvas.width * 0.4);
+  beetle.update();
+</script>

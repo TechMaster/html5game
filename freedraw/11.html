@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="960" height="600" style="background-color:#000"></canvas>
+  <button id="btnClear">Clear</button>
+</body>
+<script type="text/javascript" src="freehand.js"></script>
+</html>
+
+<script>
+  let canvas = document.getElementById("canvas");
+  let freehand = new FreeHand(canvas);
+  canvas.onmousedown = (event) => {
+    freehand.onmousedown(event);
+  };
+
+  canvas.onmousemove = (event) => {
+    freehand.onmousemove(event);
+  }
+
+  canvas.onmouseup = (event) => {
+    freehand.onmouseup(event);
+  }
+
+  let btnClear = document.getElementById("btnClear");
+  btnClear.onclick = () => {
+    freehand.clearCanvas();
+  }
+</script>

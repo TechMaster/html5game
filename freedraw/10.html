@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="960" height="600" style="background-color:#000"></canvas>
+  <button id="btnClear">Clear</button>
+</body>
+
+</html>
+
+<script>
+  let canvas = document.getElementById("canvas");
+  
+
+  
+
+  let freehand = new FreeHand(canvas);
+
+  canvas.onmousedown = (event) => {
+    freehand.onmousedown(event);
+  };
+
+  canvas.onmousemove = (event) => {
+    freehand.onmousemove(event);
+  }
+
+  canvas.onmouseup = (event) => {
+    freehand.onmouseup(event);
+  }
+
+  let btnClear = document.getElementById("btnClear");
+  btnClear.onclick = () => {
+    freehand.clearCanvas();
+  } 
+
+  function rgb() {
+    color = 'rgb(';
+    for (var i = 0; i < 3; i++) {
+      color += Math.floor(Math.random() * 255) + ',';
+    }
+    return color.replace(/\,$/, ')');
+  }    
+</script>

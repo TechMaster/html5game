@@ -13,16 +13,13 @@
     var tool = this;
     var context = new_context;
     this.started = false;
+    var move_count = 0;
     context.lineWidth = 5;
     context.lineJoin = 'round';
     context.lineCap = 'round';
     context.strokeStyle = 'red';
 
-    // create an in-memory canvas
-    var memCanvas = document.createElement('canvas');
-    memCanvas.width = 300;
-    memCanvas.height = 300;
-    var memCtx = memCanvas.getContext('2d');
+
     this.points = [];
 
     this.mousedown = function (ev) {
@@ -35,9 +32,7 @@
 
     this.mousemove = function (ev) {
       if (tool.started) {
-        context.clearRect(0, 0, 300, 300);
-        // put back the saved content
-        context.drawImage(memCanvas, 0, 0);
+        //context.clearRect(0, 0, 300, 300);
         tool.points.push({
           x: ev._x,
           y: ev._y
@@ -49,10 +44,6 @@
     this.mouseup = function (ev) {
       if (tool.started) {
         tool.started = false;
-        // When the pen is done, save the resulting context
-        // to the in-memory canvas
-        memCtx.clearRect(0, 0, 300, 300);
-        memCtx.drawImage(canvas, 0, 0);
         tool.points = [];
       }
     };
@@ -60,7 +51,6 @@
     // clear both canvases!
     this.clear = function () {
       context.clearRect(0, 0, 300, 300);
-      memCtx.clearRect(0, 0, 300, 300);
     };
   }
 

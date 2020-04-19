@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="600" height="400" style="background-color:#333"></canvas>
+</body>
+
+</html>
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext("2d");
+  canvas.addEventListener("mousemove", function (event) {
+    c.beginPath();
+    c.arc(event.offsetX, event.offsetY, 2, 0, Math.PI * 2, false);
+    c.fillStyle = "white";
+    c.fill();
+    c.closePath();
+  });
+</script>

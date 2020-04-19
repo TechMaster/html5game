@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="600" height="400" style="background-color:#333"></canvas>
+</body>
+
+</html>
+<!--
+  Tham khảo https://stackoverflow.com/questions/3783419/smooth-user-drawn-lines-in-canvas
+-->
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext("2d");
+  let isDraw = false;
+  let x, y;
+
+  canvas.onmousedown = (event) => {
+    x = event.offsetX;
+    y = event.offsetY;
+    isDraw = true;
+  };
+
+  canvas.onmousemove = (event) => {
+    if (isDraw) {
+      c.beginPath();
+      c.lineCap = 'round';
+      c.lineWidth = 6;
+      c.moveTo(x, y);
+      c.lineTo(event.offsetX, event.offsetY);
+      c.strokeStyle = 'white';
+      c.stroke();
+      x = event.offsetX;
+      y = event.offsetY;
+
+    }
+  }
+
+  canvas.onmouseup = (event) => {
+    isDraw = false;
+  }
+</script>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="600" height="400" style="background-color:#333"></canvas>
+</body>
+
+</html>
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext("2d");
+  let isDraw = false;
+
+
+  canvas.onmousedown = (event) => {
+    c.moveTo(event.offsetX, event.offsetY);
+    isDraw = true;
+  };
+
+  canvas.onmousemove = (event) => {
+    if (isDraw) {
+      c.lineCap = 'round';
+      c.lineWidth = 6;
+      c.lineTo(event.offsetX, event.offsetY);
+      c.strokeStyle = 'white';
+      c.stroke();
+    }
+  }
+
+  canvas.onmouseup = (event) => {
+    isDraw = false;
+  }
+</script>

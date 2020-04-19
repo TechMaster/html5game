@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id='canvas' width='300' height='300' style="background-color:#000"></canvas>
+  <button onclick='PEN.clear()'>Clear</button>
+  <a href="http://jsfiddle.net/NWBV4/10/">Original code</a>
+</body>
+</html>
+
+<script>
+  function Pen(new_context) {
+    var tool = this;
+    var context = new_context;
+    this.started = false;
+    var move_count = 0;
+    context.lineWidth = 5;
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+    context.strokeStyle = 'red';
+    var lastx = 0;
+    var lasty = 0;
+    // create an in-memory canvas
+    var memCanvas = document.createElement('canvas');
+    memCanvas.width = 300;
+    memCanvas.height = 300;
+    var memCtx = memCanvas.getContext('2d');
+    this.points = [];
+
+    this.mousedown = function (ev) {
+      tool.points.push({
+        x: ev._x,
+        y: ev._y
+      });
+      tool.started = true;
+    };
+
+    this.mousemove = function (ev) {
+      if (tool.started) {
+        context.clearRect(0, 0, 300, 300);
+        // put back the saved content
+        context.drawImage(memCanvas, 0, 0);
+        tool.points.push({
+          x: ev._x,
+          y: ev._y
+        });
+        drawPoints(context, tool.points);
+      }
+    };
+
+    this.mouseup = function (ev) {
+      if (tool.started) {
+        tool.started = false;
+        // When the pen is done, save the resulting context
+        // to the in-memory canvas
+        memCtx.clearRect(0, 0, 300, 300);
+        memCtx.drawImage(canvas, 0, 0);
+        tool.points = [];
+      }
+    };
+
+    // clear both canvases!
+    this.clear = function () {
+      context.clearRect(0, 0, 300, 300);
+      memCtx.clearRect(0, 0, 300, 300);
+    };
+  }
+
+  // The general-purpose event handler. This function determines the mouse position relative to the canvas element.
+
+  function ev_canvas(ev) {
+    if (false) {
+      ev._x = ev.touches[0].clientX;
+      ev._y = ev.touches[0].clientY; // CH: Is there a better way to do this?
+    }
+    else if (ev.layerX || ev.layerX == 0) { // Firefox
+      ev._x = ev.layerX;
+      ev._y = ev.layerY;
+    }
+    else if (ev.offsetX || ev.offsetX == 0) { // Opera
+      ev._x = ev.offsetX;
+      ev._y = ev.offsetY;
+    }
+
+    ev._x = ev._x + 0.5;
+    //ev._y = ev._y + 0.5;
+    // Call appropriate event handler
+    var func = PEN[ev.type];
+    if (func) {
+      func(ev);
+    }
+  }
+
+  function drawPoints(ctx, points) {
+    if (points.length < 6) return;
+
+    ctx.beginPath(), ctx.moveTo(points[0].x, points[0].y);
+    for (i = 1; i < points.length - 2; i++) {
+      var c = (points[i].x + points[i + 1].x) / 2;
+      var d = (points[i].y + points[i + 1].y) / 2;
+      ctx.quadraticCurveTo(points[i].x, points[i].y, c, d);
+    }
+    ctx.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+    ctx.stroke();
+  }
+
+  setTimeout(function () {
+    // Bind canvas to listeners
+    var canvas = document.getElementById('canvas');
+
+    PEN = new Pen(canvas.getContext('2d'));
+
+
+    canvas.addEventListener('mousedown', ev_canvas, false);
+    canvas.addEventListener('mousemove', ev_canvas, false);
+    canvas.addEventListener('mouseup', ev_canvas, false);
+  }, 500);
+</script>

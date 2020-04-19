@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="400" height="400" style="background-color:#333"></canvas>
+</body>
+
+</html>
+
+<script>
+  let canvas = document.getElementById("canvas");
+  let ctx = canvas.getContext("2d");
+
+
+  class Beele {
+    constructor(c, image_file, radius) {
+      this.c = c; //context
+      this.img = new Image();
+      this.img.src = image_file;
+      this.angle = 0;
+      this.radius = radius;
+    }
+
+    update() {
+      let c = this.c;
+      c.save();
+      c.translate(canvas.width * 0.5, canvas.height * 0.5);      
+      c.rotate(Math.PI);      
+      c.translate(- this.img.width * 0.5, - this.img.height * 0.5); // Để tâm con bọ nằm chính giữa tâm canvas            
+      c.drawImage(this.img, -this.radius, 0);
+      c.restore();
+      this.angle -= 0.005;
+    }
+  }
+  function drawCircle(c) {
+    c.save();
+    c.translate(canvas.width * 0.5, canvas.height * 0.5);
+    c.beginPath();
+    c.lineWidth = 6;
+    c.arc(0, 0, canvas.width * 0.4, 0, Math.PI * 2, false);
+    c.strokeStyle = "white";
+    c.stroke();
+    c.closePath();
+    c.restore();
+  };
+
+  
+  let beetle = new Beele(ctx, "bettle.png", canvas.width * 0.4);
+  
+  function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCircle(ctx);
+    beetle.update();
+  }
+
+  animate();
+</script>

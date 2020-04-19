@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <canvas id="canvas" width="600" height="400" style="background-color:#333"></canvas>
+</body>
+
+</html>
+<script>
+  var canvas = document.getElementById("canvas");
+  var c = canvas.getContext("2d");
+
+  canvas.addEventListener("click", function (event) {
+    c.moveTo(event.offsetX, event.offsetY);
+  });
+
+  canvas.addEventListener("mousemove", function (event) {
+    c.lineTo(event.offsetX, event.offsetY);
+    c.stroke();
+  });
+</script>

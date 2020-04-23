@@ -3,7 +3,17 @@
 <html>
 
 <body>
-  <canvas id="canvas" width="960" height="600" style="background-color:#000"></canvas>
+  <canvas id="canvas" width="960" height="600" style="background-color:#DEDEDE"></canvas>
 </body>
-
 </html>
+
+<script>
+  let canvas = document.getElementById("canvas");
+  let ctx = canvas.getContext("2d");
+  var img = new Image();
+  img.src = "man1.png";
+  img.onload = () => {
+    console.log("load");
+    ctx.drawImage(img, 10, 10);
+  }
+</script>

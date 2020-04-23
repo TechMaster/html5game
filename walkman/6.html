@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+  <canvas id="canvas" width="960" height="600" style="background-color:#DEDEDE"></canvas>
+</body>
+<!--
+  Có 2 vấn đề: nhìn chưa thật, người đi mà như đứng yên một chỗ
+  Code này rối quá x, y loạn cả lên. Hãy đóng gói lại thuộc tính vào class đi !
+-->
+<script>
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  class Sprite {
+    //ROW, COL số hàng, số cột nếu ảnh truyền vào là một ảnh to
+    constructor(imagefile, onImageLoaded, ctx, row, col) {
+      this.image = new Image();
+      image.src = imagefile;
+      image.onload = onImageLoaded;
+      this.ctx = ctx;
+      this.row = row;
+      this.col = col;
+    }
+
+    drawAt(x, y) {
+      this.ctx.drawImage(this.image, x, y);
+    }
+
+    drawFrameAt(i_row, j_col, x, y, scale){
+      this.ctx.drawImage(this.image, this.image.width *, y);
+    }
+
+    
+
+  }
+
+  class Man extends Sprite {
+
+  }
+
+  class Tree extends Sprite {
+
+  }
+
+
+  let man = new Image();
+  man.src = "walkmanSprite.png";
+
+  let tree = new Image();
+  tree.src = "tree.png"
+
+  let i = 0;
+  let imageLoadCount = 0;
+  man.onload = onImageLoad;
+  tree.onload = onImageLoad;
+
+  function onImageLoad() {
+    imageLoadCount += 1;
+    if (imageLoadCount == 2) {
+      
+      animate()
+    }
+  }
+
+  let x = 300, y = 320, width = 193, height = 364;
+  let fps = 10;
+  /*
+  http://www.javascriptkit.com/javatutors/requestanimationframe.shtml
+  */
+  function animate() {
+    setTimeout(function () { //throttle requestAnimationFrame to 20fps
+      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(tree, 520, 40);
+      ctx.drawImage(man, i * width, 0, width, height, x, y, 120, 226);
+      i += 1;
+      if (i == 6) {
+        i = 0;
+      }
+    }, 1000 / fps)
+  }
+
+</script>
+
+</html>
